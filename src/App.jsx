@@ -1,3 +1,4 @@
+import { GameBoard } from "./components/GameBoard"
 import { Header } from "./components/Header"
 
 function App() {
@@ -5,6 +6,7 @@ function App() {
   return (
     <>
       <Header></Header>
+      <GameBoard></GameBoard>
     </>
   )
 }
