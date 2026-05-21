@@ -3,10 +3,23 @@ import { GameStatus } from "./components/GameStatus"
 import { Header } from "./components/Header"
 import { ScoreBoard } from "./components/ScoreBord"
 import { useState } from "react"
+
+const INITIAL_GAME_BOARD = [
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+];
+
 function App() {
   const [gameTurns, setGameTurns] = useState([])
-    // TO-DO
-    // create board with gameTurns
+  
+  
+  const gameBoard = [...INITIAL_GAME_BOARD.map(innerItem => [...innerItem])]
+  for (let turn of gameTurns) {
+      const { square, symbol } = turn
+      const { rowIndex, colIndex } = square
+      gameBoard[rowIndex][colIndex] = symbol
+    }
   const activePlayer =  gameTurns.length % 2 == 0 ? "X" : "O"
   
   function handleSelectSquare(row, col){
@@ -30,7 +43,7 @@ function App() {
       <div className="w-full max-w-5xl mx-auto mt-10 p-6">
         <div className="grid md:grid-cols-[1fr_2fr_1fr] gap-10">
         <ScoreBoard ></ScoreBoard>
-        <GameBoard onSelect={handleSelectSquare}></GameBoard>
+        <GameBoard board={gameBoard} onSelect={handleSelectSquare}></GameBoard>
         <GameStatus></GameStatus>
         </div>
       </div>
