@@ -2,20 +2,28 @@ import { GameBoard } from "./components/GameBoard"
 import { GameStatus } from "./components/GameStatus"
 import { Header } from "./components/Header"
 import { ScoreBoard } from "./components/ScoreBord"
-
+import { useState } from "react"
 function App() {
+  const [gameTurns, setGameTurns] = useState([])
     // TO-DO
-    // Add state for turns 
-    // drive active palyer 
-    // change board State
-  function handleSelectSquare(row, col){
-    console.log('row: ',row, "col:",col)
-    // change board basd on player Turn
-    
-
+    // create board with gameTurns
+  const activePlayer =  gameTurns.length % 2 == 0 ? "X" : "O"
   
+  function handleSelectSquare(row, col){
+    setGameTurns(
+      prevTurn => {
+        const updatedTurn = [
+          ...prevTurn, 
+          {
+            square:{rowIndex:row, colIndex:col},
+            symbol: activePlayer
+          }
+        ]
+        return updatedTurn
+      }
+    )
   }
-
+  console.log(gameTurns)
   return (
     <>
       <Header></Header>
