@@ -15,6 +15,8 @@ function App() {
   const [gameTurns, setGameTurns] = useState([])
   const [starterModal, setStarterModal] = useState(true)
   const [gameSetup, setGameSetup] = useState({})
+  // const [gameScore, setGameScore] = useState()
+
   const gameBoard = [...INITIAL_GAME_BOARD.map(innerItem => [...innerItem])]
   for (let turn of gameTurns) {
     const { square, symbol } = turn
@@ -80,10 +82,11 @@ function App() {
               name: gameSetup[activePlayer],
               symbol: activePlayer
             }}
-            winner = {{
+            winner={{
               symbol: winner,
               name: gameSetup[winner]
             }}
+            draw={draw}
             onReset={resetBoard}></GameStatus>
         </div>
       </div>

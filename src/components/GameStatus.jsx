@@ -1,4 +1,4 @@
-export function GameStatus({ onReset, currentPlayer, winner }) {
+export function GameStatus({ onReset, currentPlayer, winner, draw }) {
   const hasWinner = winner?.symbol;
   let content;
 
@@ -8,7 +8,15 @@ export function GameStatus({ onReset, currentPlayer, winner }) {
       symbol: winner.symbol,
       description: "Won!!!"
     }
-  } else {
+    
+  } 
+  else if(draw){
+    content = {
+      name: null,
+      symbol: ':(',
+      description: "Draw !!!"}
+  }
+  else {
     content = {
       name: currentPlayer.name,
       symbol: currentPlayer.symbol,
