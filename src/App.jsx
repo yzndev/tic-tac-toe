@@ -2,7 +2,7 @@ import { GameBoard } from "./components/GameBoard"
 import { GameStatus } from "./components/GameStatus"
 import { Header } from "./components/Header"
 import { ScoreBoard } from "./components/ScoreBoard"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { WINNING_COMBINATIONS } from "./components/win"
 import StartGameModal from "./components/StarterModal"
 const INITIAL_GAME_BOARD = [
@@ -16,8 +16,8 @@ function App() {
   const [starterModal, setStarterModal] = useState(true)
   const [gameSetup, setGameSetup] = useState({})
   const [gameScore, setGameScore] = useState({
-    player1:0,
-    player2:0,
+    X:0,
+    O:0,
     draw:0,
     currentRound:1
   })
@@ -39,12 +39,50 @@ function App() {
       gameBoard[frow][fcol] === gameBoard[trow][tcol]
     ) {
       winner = gameBoard[frow][fcol]
+      
     }
   }
   let draw = gameTurns.length === 9 && !winner
+  const roundFinished = winner || draw
 
-  function resetBoard() {
-    setGameTurns([])
+  useEffect(() => {
+        if (!winner && !draw) return;
+        setGameScore(prevScore => {
+            const updatedScore = { ...prevScore };
+            if (winner === "X") updatedScore.X++;
+            else if (winner === "O") updatedScore.O++;
+            else if (draw) updatedScore.draw++;
+
+            if (prevScore.currentRound < gameSetup.totalRounds) {
+                updatedScore.currentRound++;
+            }
+
+            return updatedScore;
+        });
+
+    }, [winner, draw, gameSetup.totalRounds]);
+    useEffect(() => {
+        if (!roundFinished) return;
+
+        if (gameScore.currentRound <= gameSetup.totalRounds) {
+          setGameTurns([])
+
+        }
+
+    }, [gameScore.currentRound]);
+
+
+    const isGameOver = gameScore.currentRound > gameSetup.totalRounds;
+
+  function resetGame() {
+      setGameTurns([])
+      setStarterModal(true)
+      setGameScore({
+          X:0,
+          O:0,
+          draw:0,
+          currentRound:1
+        })
   }
   function handleSelectSquare(row, col) {
     if (gameBoard[row][col] !== null || winner) {
@@ -81,8 +119,8 @@ function App() {
       <div className="w-full max-w-5xl mx-auto mt-10 p-6">
         <div className="grid md:grid-cols-[1fr_2fr_1fr] gap-10">
           <ScoreBoard gameData={{
-            firstPlayer:[gameSetup.X, gameScore.player1,],
-            secondPlayer:[gameSetup.O, gameScore.player2,],
+            firstPlayer:[gameSetup.X, gameScore.X,],
+            secondPlayer:[gameSetup.O, gameScore.O,],
             draw:gameScore.draw,
             round:gameScore.currentRound
           }}></ScoreBoard>
@@ -97,7 +135,7 @@ function App() {
               name: gameSetup[winner]
             }}
             draw={draw}
-            onReset={resetBoard}></GameStatus>
+            onReset={resetGame}></GameStatus>
         </div>
       </div>
     </>
