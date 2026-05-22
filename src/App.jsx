@@ -1,7 +1,7 @@
 import { GameBoard } from "./components/GameBoard"
 import { GameStatus } from "./components/GameStatus"
 import { Header } from "./components/Header"
-import { ScoreBoard } from "./components/ScoreBord"
+import { ScoreBoard } from "./components/ScoreBoard"
 import { useState } from "react"
 import { WINNING_COMBINATIONS } from "./components/win"
 import StartGameModal from "./components/StarterModal"
@@ -29,14 +29,14 @@ function App() {
     const { row: trow, column: tcol } = combiantion[2]
 
     if (gameBoard[frow][fcol] && gameBoard[frow][fcol] === gameBoard[srow][scol] &&
-        gameBoard[frow][fcol] === gameBoard[trow][tcol]
-      ) {
-        winner = gameBoard[frow][fcol]
+      gameBoard[frow][fcol] === gameBoard[trow][tcol]
+    ) {
+      winner = gameBoard[frow][fcol]
     }
-    }
-    let draw = gameTurns.length === 9 && !winner
-  
-  function resetBoard(){
+  }
+  let draw = gameTurns.length === 9 && !winner
+
+  function resetBoard() {
     setGameTurns([])
   }
   function handleSelectSquare(row, col) {
@@ -57,13 +57,13 @@ function App() {
       }
     )
   }
-  function handleStart(data){
-     setGameSetup({
-            X: data.player1,
-            O: data.mode === 'vsComputer' ? 'CPU' : data.player2,
-            mode: data.mode,
-            totalRounds: data.rounds
-        });
+  function handleStart(data) {
+    setGameSetup({
+      X: data.player1,
+      O: data.mode === 'vsComputer' ? 'CPU' : data.player2,
+      mode: data.mode,
+      totalRounds: data.rounds
+    });
     setStarterModal(false)
   }
 
@@ -75,7 +75,16 @@ function App() {
         <div className="grid md:grid-cols-[1fr_2fr_1fr] gap-10">
           <ScoreBoard ></ScoreBoard>
           <GameBoard board={gameBoard} onSelect={handleSelectSquare}></GameBoard>
-          <GameStatus onReset={resetBoard}></GameStatus>
+          <GameStatus
+            currentPlayer={{
+              name: gameSetup[activePlayer],
+              symbol: activePlayer
+            }}
+            winner = {{
+              symbol: winner,
+              name: gameSetup[winner]
+            }}
+            onReset={resetBoard}></GameStatus>
         </div>
       </div>
     </>
