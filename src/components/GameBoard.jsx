@@ -1,5 +1,4 @@
 export function GameBoard({board, onSelect}) {
-  // console.log(board)
   return (
     <ol className="aspect-square bg-white rounded-xl shadow-sm p-6 grid grid-cols-3 gap-4">
       {board.map((row, rowIndex) =>

@@ -4,6 +4,7 @@ import { Header } from "./components/Header"
 import { ScoreBoard } from "./components/ScoreBord"
 import { useState } from "react"
 import { WINNING_COMBINATIONS } from "./components/win"
+import StartGameModal from "./components/StarterModal"
 const INITIAL_GAME_BOARD = [
   [null, null, null],
   [null, null, null],
@@ -12,7 +13,7 @@ const INITIAL_GAME_BOARD = [
 
 function App() {
   const [gameTurns, setGameTurns] = useState([])
-
+  const [starterModal, setStarterModal] = useState(true)
 
   const gameBoard = [...INITIAL_GAME_BOARD.map(innerItem => [...innerItem])]
   for (let turn of gameTurns) {
@@ -59,6 +60,7 @@ function App() {
 
   return (
     <>
+      {starterModal ? <StartGameModal></StartGameModal> : null}
       <Header></Header>
       <div className="w-full max-w-5xl mx-auto mt-10 p-6">
         <div className="grid md:grid-cols-[1fr_2fr_1fr] gap-10">
