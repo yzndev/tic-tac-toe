@@ -14,7 +14,7 @@ const INITIAL_GAME_BOARD = [
 function App() {
   const [gameTurns, setGameTurns] = useState([])
   const [starterModal, setStarterModal] = useState(true)
-
+  const [gameSetup, setGameSetup] = useState({})
   const gameBoard = [...INITIAL_GAME_BOARD.map(innerItem => [...innerItem])]
   for (let turn of gameTurns) {
     const { square, symbol } = turn
@@ -57,10 +57,19 @@ function App() {
       }
     )
   }
+  function handleStart(data){
+     setGameSetup({
+            X: data.player1,
+            O: data.mode === 'vsComputer' ? 'CPU' : data.player2,
+            mode: data.mode,
+            totalRounds: data.rounds
+        });
+    setStarterModal(false)
+  }
 
   return (
     <>
-      {starterModal ? <StartGameModal></StartGameModal> : null}
+      {starterModal ? <StartGameModal onStart={handleStart}></StartGameModal> : null}
       <Header></Header>
       <div className="w-full max-w-5xl mx-auto mt-10 p-6">
         <div className="grid md:grid-cols-[1fr_2fr_1fr] gap-10">

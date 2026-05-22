@@ -2,7 +2,7 @@ import {useState} from 'react'
 import { modeButtonClass } from './helper';
 
 
-export default function StartGameModal({handleStart}) {
+export default function StartGameModal({onStart}) {
   const [gameData, setGameData] = useState({
     player1:"player1",
     player2:"player2",
@@ -91,7 +91,7 @@ export default function StartGameModal({handleStart}) {
           </select>
         </div>
 
-        <button onClick={()=>handleStart(gameData)} className="mt-2 bg-teal-500 hover:bg-teal-600 text-white py-3 rounded-lg shadow-md transition">
+        <button onClick={()=>onStart(gameData)} className="mt-2 bg-teal-500 hover:bg-teal-600 text-white py-3 rounded-lg shadow-md transition">
           Start Game
         </button>
 
