@@ -15,7 +15,12 @@ function App() {
   const [gameTurns, setGameTurns] = useState([])
   const [starterModal, setStarterModal] = useState(true)
   const [gameSetup, setGameSetup] = useState({})
-  // const [gameScore, setGameScore] = useState()
+  const [gameScore, setGameScore] = useState({
+    player1:0,
+    player2:0,
+    draw:0,
+    currentRound:1
+  })
 
   const gameBoard = [...INITIAL_GAME_BOARD.map(innerItem => [...innerItem])]
   for (let turn of gameTurns) {
@@ -75,7 +80,12 @@ function App() {
       <Header></Header>
       <div className="w-full max-w-5xl mx-auto mt-10 p-6">
         <div className="grid md:grid-cols-[1fr_2fr_1fr] gap-10">
-          <ScoreBoard ></ScoreBoard>
+          <ScoreBoard gameData={{
+            firstPlayer:[gameSetup.X, gameScore.player1,],
+            secondPlayer:[gameSetup.O, gameScore.player2,],
+            draw:gameScore.draw,
+            round:gameScore.currentRound
+          }}></ScoreBoard>
           <GameBoard board={gameBoard} onSelect={handleSelectSquare}></GameBoard>
           <GameStatus
             currentPlayer={{
