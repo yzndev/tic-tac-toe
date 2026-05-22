@@ -1,4 +1,4 @@
-export function GameStatus(){
+export function GameStatus({onReset}){
     
 
     return(
@@ -12,7 +12,7 @@ export function GameStatus(){
             <p className="text-sm text-gray-500">You are X</p>
           </div>
 
-          <button className="bg-teal-800 hover:bg-gray-900 transition text-white rounded-xl py-3 shadow-lg">
+          <button onClick={onReset} className="bg-teal-800 hover:bg-gray-900 transition text-white rounded-xl py-3 shadow-lg">
             Restart Game
           </button>
 

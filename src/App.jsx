@@ -35,7 +35,9 @@ function App() {
     }
     let draw = gameTurns.length === 9 && !winner
   
-  
+  function resetBoard(){
+    setGameTurns([])
+  }
   function handleSelectSquare(row, col) {
     if (gameBoard[row][col] !== null || winner) {
       return;
@@ -62,7 +64,7 @@ function App() {
         <div className="grid md:grid-cols-[1fr_2fr_1fr] gap-10">
           <ScoreBoard ></ScoreBoard>
           <GameBoard board={gameBoard} onSelect={handleSelectSquare}></GameBoard>
-          <GameStatus></GameStatus>
+          <GameStatus onReset={resetBoard}></GameStatus>
         </div>
       </div>
     </>
