@@ -1,16 +1,44 @@
-# React + Vite
+# Tic-Tac-Toe Pro
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+یک بازی مدرن و تعاملی تیک‌تاک‌تو (دوز) ساخته شده با **React** و **Tailwind CSS**. این پروژه دارای قابلیت بازی دو نفره و بازی در مقابل هوش مصنوعی (CPU) با سطوح استراتژیک است.
 
-Currently, two official plugins are available:
+## ویژگی‌ها
+- **حالت‌های بازی:** قابلیت انتخاب بازی دو نفره (Local) یا تک‌نفره در مقابل CPU.
+- **هوش مصنوعی هوشمند:** دارای الگوریتم اولویت‌بندی برای برد، دفاع و اشغال نقاط استراتژیک.
+- **مدیریت راندها:** قابلیت تنظیم تعداد راندها و پیگیری امتیازات کلی.
+- **رابط کاربری مدرن:** طراحی مینیمال با استفاده از Tailwind CSS.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## تکنولوژی‌های استفاده شده
+- **React.js**: مدیریت کامپوننت‌ها و استیت‌ها.
+- **Tailwind CSS**: برای طراحی رابط کاربری (UI).
+- **JavaScript (ES6+)**: منطق بازی و الگوریتم هوش مصنوعی.
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 📋 نقشه راه و توسعه آینده (To-Do List)
 
-## Expanding the ESLint configuration
+این پروژه در حال توسعه است و اولویت‌های بعدی برای بهبود کیفیت کد و قابلیت‌ها عبارتند از:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### ✅ فاز ۱: پیاده‌سازی ویژگی‌ها
+- [x] پیاده‌سازی منطق پایه بازی.
+- [x] اضافه کردن حالت بازی با CPU (نسخه اولیه).
+
+### 🔄 فاز ۲: ریفکتورینگ و تمیزکاری کد (Refactoring)
+- [ ] **Extract Game Rules:** انتقال توابع محاسباتی (برد، تساوی، تشخیص حرکت) به فایل‌های جداگانه در `src/game/rules.js`.
+- [ ] **Extract CPU Logic:** انتقال هوش مصنوعی به ماژول مستقل در `src/game/cpu/`.
+- [ ] **Custom Hook:** ایجاد هوک `useTicTacToe` برای کپسوله‌سازی منطق استیت بازی و جدا کردن آن از کامپوننت‌های UI (`App.js`).
+- [ ] **State Machine:** استفاده از الگوهای مدیریت استیت برای جلوگیری از تداخل مودال‌ها و وضعیت بازی.
+
+### 🎨 فاز ۳: بهبود تجربه کاربری (UX)
+- [ ] اضافه کردن انیمیشن‌های نرم (Framer Motion) برای کلیک‌ها و باز شدن مودال‌ها.
+- [ ] اضافه کردن قابلیت انتخاب نام بازیکنان و آیکون‌ها.
+
+---
+
+## نحوه اجرا
+1. مخزن را کلون کنید: `git clone https://github.com/yzndev/tic-tac-toe.git`
+2. پکیج‌ها را نصب کنید: `npm install`
+3. پروژه را اجرا کنید: `npm run dev`
+
+---
+ساخته شده با ❤️ توسط mmdyzn
