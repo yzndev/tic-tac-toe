@@ -4,22 +4,32 @@ import { Header } from "./components/Header"
 import { ScoreBoard } from "./components/ScoreBoard"
 import { useState, useEffect } from "react"
 import { WINNING_COMBINATIONS } from "./components/win"
+import GameOverModal from "./components/GameOver"
 import StartGameModal from "./components/StarterModal"
+
+
 const INITIAL_GAME_BOARD = [
   [null, null, null],
   [null, null, null],
   [null, null, null],
 ];
 
+const MODAL_TYPES = {
+  START: 'start',
+  END: 'end',
+  NONE: null
+};
+
+
 function App() {
   const [gameTurns, setGameTurns] = useState([])
-  const [starterModal, setStarterModal] = useState(true)
+  const [modal, setModal] = useState(MODAL_TYPES.START)
   const [gameSetup, setGameSetup] = useState({})
   const [gameScore, setGameScore] = useState({
-    X:0,
-    O:0,
-    draw:0,
-    currentRound:1
+    X: 0,
+    O: 0,
+    draw: 0,
+    currentRound: 1
   })
 
   const gameBoard = [...INITIAL_GAME_BOARD.map(innerItem => [...innerItem])]
@@ -39,56 +49,58 @@ function App() {
       gameBoard[frow][fcol] === gameBoard[trow][tcol]
     ) {
       winner = gameBoard[frow][fcol]
-      
+
     }
   }
   let draw = gameTurns.length === 9 && !winner
   const roundFinished = winner || draw
 
   useEffect(() => {
-        if (!winner && !draw) return;
-        setGameScore(prevScore => {
-            const updatedScore = { ...prevScore };
-            if (winner === "X") updatedScore.X++;
-            else if (winner === "O") updatedScore.O++;
-            else if (draw) updatedScore.draw++;
+    if (!winner && !draw) return;
+    setGameScore(prevScore => {
+      const updatedScore = { ...prevScore };
+      if (winner === "X") updatedScore.X++;
+      else if (winner === "O") updatedScore.O++;
+      else if (draw) updatedScore.draw++;
 
-            if (prevScore.currentRound < gameSetup.totalRounds) {
-                updatedScore.currentRound++;
-            }
+      if (prevScore.currentRound <= gameSetup.totalRounds) {
+        updatedScore.currentRound++;
+      }
 
-            return updatedScore;
-        });
+      return updatedScore;
+    });
 
-    }, [winner, draw, gameSetup.totalRounds]);
-    useEffect(() => {
-        if (!roundFinished) return;
+  }, [winner, draw, gameSetup.totalRounds]);
+  useEffect(() => {
+    if (!roundFinished) return;
 
-        if (gameScore.currentRound <= gameSetup.totalRounds) {
-          setGameTurns([])
-
-        }
-
-    }, [gameScore.currentRound]);
-
-
-    const isGameOver = gameScore.currentRound > gameSetup.totalRounds;
-
-  function resetGame() {
+    if (gameScore.currentRound <= gameSetup.totalRounds) {
       setGameTurns([])
-      setStarterModal(true)
-      setGameScore({
-          X:0,
-          O:0,
-          draw:0,
-          currentRound:1
-        })
+
+    }
+
+  }, [gameScore.currentRound]);
+
+  const isGameOver = gameScore.currentRound > gameSetup.totalRounds;
+  function resetGame() {
+    setGameTurns([])
+    setModal(MODAL_TYPES.START)
+    setGameScore({
+      X: 0,
+      O: 0,
+      draw: 0,
+      currentRound: 1
+    })
   }
+    useEffect(() => {
+    if (isGameOver) {
+      setModal(MODAL_TYPES.END);
+    }
+  }, [isGameOver]);
   function handleSelectSquare(row, col) {
     if (gameBoard[row][col] !== null || winner) {
       return;
     }
-    console.log(gameBoard[row][col])
     setGameTurns(
       prevTurn => {
         const updatedTurn = [
@@ -109,20 +121,28 @@ function App() {
       mode: data.mode,
       totalRounds: data.rounds
     });
-    setStarterModal(false)
+    setModal(MODAL_TYPES.NONE)
   }
 
   return (
     <>
-      {starterModal ? <StartGameModal onStart={handleStart}></StartGameModal> : null}
+      { }
+      {modal === "end" ? <GameOverModal
+        winner={winner }
+        draw={draw }
+        onReset={resetGame}
+        score={gameScore }
+        playerNames={ gameSetup}
+      ></GameOverModal> : null}
+      {modal === "start" ? <StartGameModal onStart={handleStart}></StartGameModal> : null}
       <Header></Header>
       <div className="w-full max-w-5xl mx-auto mt-10 p-6">
         <div className="grid md:grid-cols-[1fr_2fr_1fr] gap-10">
           <ScoreBoard gameData={{
-            firstPlayer:[gameSetup.X, gameScore.X,],
-            secondPlayer:[gameSetup.O, gameScore.O,],
-            draw:gameScore.draw,
-            round:gameScore.currentRound
+            firstPlayer: [gameSetup.X, gameScore.X,],
+            secondPlayer: [gameSetup.O, gameScore.O,],
+            draw: gameScore.draw,
+            round: gameScore.currentRound
           }}></ScoreBoard>
           <GameBoard board={gameBoard} onSelect={handleSelectSquare}></GameBoard>
           <GameStatus
