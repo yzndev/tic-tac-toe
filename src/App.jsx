@@ -6,6 +6,7 @@ import { useState, useEffect } from "react"
 import { WINNING_COMBINATIONS } from "./components/win"
 import GameOverModal from "./components/GameOver"
 import StartGameModal from "./components/StarterModal"
+import { getCpuMove } from "./components/cpu"
 
 
 const INITIAL_GAME_BOARD = [
@@ -80,8 +81,27 @@ function App() {
     }
 
   }, [gameScore.currentRound]);
+  useEffect(() => {
+    if (gameSetup.mode !== 'vsComputer') return;
+    if (activePlayer !== 'O') return;
+    if (winner || draw) return;
+
+    let isMounted = true; 
+
+    const timer = setTimeout(() => {
+      if (isMounted) {
+        const move = getCpuMove(gameBoard, 'O', 'X');
+        handleSelectSquare(move.row, move.col, true);
+      }
+    }, 1500); 
+    return () => {
+        isMounted = false;
+        clearTimeout(timer);
+    };
+}, [gameTurns, activePlayer, gameSetup.mode])
 
   const isGameOver = gameScore.currentRound > gameSetup.totalRounds;
+
   function resetGame() {
     setGameTurns([])
     setModal(MODAL_TYPES.START)
@@ -92,15 +112,18 @@ function App() {
       currentRound: 1
     })
   }
-    useEffect(() => {
+  useEffect(() => {
     if (isGameOver) {
       setModal(MODAL_TYPES.END);
     }
   }, [isGameOver]);
-  function handleSelectSquare(row, col) {
+  function handleSelectSquare(row, col, isCpu=false) {
     if (gameBoard[row][col] !== null || winner) {
       return;
     }
+    if (!isCpu && gameSetup.mode === 'vsComputer' && activePlayer === 'O') {
+    return;
+  }
     setGameTurns(
       prevTurn => {
         const updatedTurn = [
@@ -126,13 +149,12 @@ function App() {
 
   return (
     <>
-      { }
       {modal === "end" ? <GameOverModal
-        winner={winner }
-        draw={draw }
+        winner={winner}
+        draw={draw}
         onReset={resetGame}
-        score={gameScore }
-        playerNames={ gameSetup}
+        score={gameScore}
+        playerNames={gameSetup}
       ></GameOverModal> : null}
       {modal === "start" ? <StartGameModal onStart={handleStart}></StartGameModal> : null}
       <Header></Header>
