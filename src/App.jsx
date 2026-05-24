@@ -7,7 +7,7 @@ import GameOverModal from "./components/GameOver"
 import StartGameModal from "./components/StarterModal"
 import { getCpuMove } from "./game/cpu"
 import { MODAL_TYPES, INITIAL_GAME_SCORE } from "./game/const"
-import { checkWinner, createBoard, driveActivePlayer } from "./game/rules"
+import { checkWinner, createBoard, driveActivePlayer,hasDraw } from "./game/rules"
 
 
 
@@ -25,7 +25,7 @@ function App() {
 
   let winner = checkWinner(gameBoard)
   let draw = hasDraw(gameTurns, winner)
-  
+
   const roundFinished = winner || draw
 
   useEffect(() => {
