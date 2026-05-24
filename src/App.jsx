@@ -3,57 +3,29 @@ import { GameStatus } from "./components/GameStatus"
 import { Header } from "./components/Header"
 import { ScoreBoard } from "./components/ScoreBoard"
 import { useState, useEffect } from "react"
-import { WINNING_COMBINATIONS } from "./components/win"
 import GameOverModal from "./components/GameOver"
 import StartGameModal from "./components/StarterModal"
-import { getCpuMove } from "./components/cpu"
+import { getCpuMove } from "./game/cpu"
+import { MODAL_TYPES, INITIAL_GAME_SCORE } from "./game/const"
+import { checkWinner, createBoard, driveActivePlayer } from "./game/rules"
 
 
-const INITIAL_GAME_BOARD = [
-  [null, null, null],
-  [null, null, null],
-  [null, null, null],
-];
-
-const MODAL_TYPES = {
-  START: 'start',
-  END: 'end',
-  NONE: null
-};
 
 
 function App() {
+ 
   const [gameTurns, setGameTurns] = useState([])
   const [modal, setModal] = useState(MODAL_TYPES.START)
   const [gameSetup, setGameSetup] = useState({})
-  const [gameScore, setGameScore] = useState({
-    X: 0,
-    O: 0,
-    draw: 0,
-    currentRound: 1
-  })
+  const [gameScore, setGameScore] = useState(INITIAL_GAME_SCORE)
+  
+  
+  const gameBoard = createBoard(gameTurns)
+  const activePlayer = driveActivePlayer(gameTurns)
 
-  const gameBoard = [...INITIAL_GAME_BOARD.map(innerItem => [...innerItem])]
-  for (let turn of gameTurns) {
-    const { square, symbol } = turn
-    const { rowIndex, colIndex } = square
-    gameBoard[rowIndex][colIndex] = symbol
-  }
-  let winner = null
-  const activePlayer = gameTurns.length % 2 == 0 ? "X" : "O"
-  for (let combiantion of WINNING_COMBINATIONS) {
-    const { row: frow, column: fcol } = combiantion[0]
-    const { row: srow, column: scol } = combiantion[1]
-    const { row: trow, column: tcol } = combiantion[2]
-
-    if (gameBoard[frow][fcol] && gameBoard[frow][fcol] === gameBoard[srow][scol] &&
-      gameBoard[frow][fcol] === gameBoard[trow][tcol]
-    ) {
-      winner = gameBoard[frow][fcol]
-
-    }
-  }
-  let draw = gameTurns.length === 9 && !winner
+  let winner = checkWinner(gameBoard)
+  let draw = hasDraw(gameTurns, winner)
+  
   const roundFinished = winner || draw
 
   useEffect(() => {
@@ -74,10 +46,8 @@ function App() {
   }, [winner, draw, gameSetup.totalRounds]);
   useEffect(() => {
     if (!roundFinished) return;
-
     if (gameScore.currentRound <= gameSetup.totalRounds) {
       setGameTurns([])
-
     }
 
   }, [gameScore.currentRound]);

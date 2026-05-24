@@ -1,4 +1,4 @@
-import { WINNING_COMBINATIONS } from "./win";
+import { WINNING_COMBINATIONS } from "./const";
 
 export function getCpuMove(board, cpuSymbol, playerSymbol) {
 
