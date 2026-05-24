@@ -25,9 +25,7 @@ export function checkWinner(gameBoard){
         ) {
             return gameBoard[frow][fcol]
         }
-        else{
-            return null
-        }
+
       }
 }
 export function hasDraw(gameTurns, winner){
